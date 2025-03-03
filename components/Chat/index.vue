@@ -42,6 +42,7 @@ const user = ref({ id: '', nickname: '', chatRoom: '' });
 const joinedUsers = ref([]);
 const messages = ref([]);
 
+let socketInstance;
 
 function initSocket() {
     const { state, sendMessage, disconnect, waitForConnection } = useSocket({
@@ -86,8 +87,6 @@ function initSocket() {
     }
 }
 
-
-
 onMounted(() => {
     const { getChatConfig, isConfigured } = useChatConfig()
 
@@ -101,7 +100,7 @@ onMounted(() => {
     nickname.value = config.nickname;
     chatRoomName.value = config.chatRoomName;
 
-    let socketInstance = initSocket();
+    socketInstance = initSocket();
     watch(() => socketInstance.state, (newState) => {
         user.value = newState.user;
         joinedUsers.value = newState.joinedUsers;
@@ -128,8 +127,12 @@ const sendMessageHandler = (newMessage) => {
         uuid: uuid,
         nickname: nickname.value,
         message: newMessage,
+        chatRoom: chatRoomName.value,
+        chatClientId: socketInstance.state.user.id,
     }
-    sendMessage(payload);
+    if (socketInstance) {
+        socketInstance.sendMessage(payload);
+    } 
 };
 
 const retry = () => {
