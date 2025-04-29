@@ -6,9 +6,11 @@ import { type ChatMessage } from "~/types/chat-message";
 export const useSocket = ({
   nickname,
   chatRoomName,
+  chatMode,
 }: {
   nickname: string;
   chatRoomName: string;
+  chatMode: string;
 }) => {
   const state = reactive<ChatSocketState>({
     isConnecting: true,
@@ -19,6 +21,7 @@ export const useSocket = ({
       id: "",
       nickname: "",
       chatRoom: "",
+      chatMode: "",
     },
   });
 
@@ -26,10 +29,13 @@ export const useSocket = ({
 
   const URL = config.public.apiChatUrl as string;
 
+  console.log("setup chatMode: ", chatMode);
+
   const socket = io(URL, {
     auth: {
       nickname: nickname,
       chatRoomName: chatRoomName,
+      chatMode: chatMode,
     },
   });
 
@@ -44,6 +50,7 @@ export const useSocket = ({
           id: socket.id!,
           nickname: nickname,
           chatRoom: chatRoomName,
+          chatMode: chatMode,
         };
         resolve(socket);
       });

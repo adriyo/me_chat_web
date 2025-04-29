@@ -18,6 +18,23 @@
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     placeholder="Enter chatroom name" required />
             </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Chat Mode
+                </label>
+                <div class="flex space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" id="single" name="chatMode" v-model="chatModeInput" value="single"
+                            class="form-radio text-green-500 focus:ring-green-500 dark:bg-gray-700" />
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">Single</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" id="multiple" name="chatMode" v-model="chatModeInput" value="multiple"
+                            class="form-radio text-green-500 focus:ring-green-500 dark:bg-gray-700" />
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">Multiple</span>
+                    </label>
+                </div>
+            </div>
             <div class="flex justify-end space-x-3">
                 <button @click="$emit('onDiscard')"
                     class="px-4 py-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white">
@@ -48,6 +65,7 @@ const emit = defineEmits(['onDiscard']);
 
 const nicknameInput = ref('');
 const chatRoomNameInput = ref('');
+const chatModeInput = ref('single');
 
 const onSubmitConfig = () => {
     const nickname = nicknameInput.value.trim();
@@ -55,7 +73,8 @@ const onSubmitConfig = () => {
     if (!nickname || !chatRoomName) {
         return;
     }
-    setChatConfig({ nickname: nickname, chatRoomName: chatRoomName });
+    const chatMode = chatModeInput.value;
+    setChatConfig({ nickname: nickname, chatRoomName: chatRoomName, chatMode: chatMode });
     nicknameInput.value = '';
     chatRoomNameInput.value = '';
 

@@ -31,6 +31,7 @@ const isMenuOpen = ref(false);
 
 const nickname = ref('');
 const chatRoomName = ref('');
+const chatMode = ref('');
 const isLoading = ref(true)
 
 const router = useRouter();
@@ -48,6 +49,7 @@ function initSocket() {
     const { state, sendMessage, disconnect, waitForConnection } = useSocket({
         nickname: nickname.value,
         chatRoomName: chatRoomName.value,
+        chatMode: chatMode.value,
     });
 
     const messages = ref(state.messages)
@@ -99,6 +101,7 @@ onMounted(() => {
     const config = getChatConfig();
     nickname.value = config.nickname;
     chatRoomName.value = config.chatRoomName;
+    chatMode.value = config.chatMode;
 
     socketInstance = initSocket();
     watch(() => socketInstance.state, (newState) => {
